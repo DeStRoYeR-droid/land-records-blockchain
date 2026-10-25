@@ -1,0 +1,31 @@
+{
+  "name": "landchain-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LandChain dashboards: officials, citizens and the agentic validator",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@noble/ed25519": "^3.2.0",
+    "@noble/hashes": "^2.4.0",
+    "leaflet": "^1.9.4",
+    "next": "16.3.8",
+    "openpgp": "^6.3.2",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.20",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}

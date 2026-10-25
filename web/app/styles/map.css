@@ -1,0 +1,257 @@
+/* The land map (Leaflet), the register explorer, the chain of ownership and record downloads. */
+.land-map {
+  display: grid;
+  gap: var(--s-2);
+}
+.land-map-canvas {
+  width: 100%;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-s);
+  background: var(--sheet-3);
+  z-index: 0;
+}
+.land-map-canvas:focus-visible {
+  outline: 3px solid var(--reg);
+  outline-offset: 2px;
+}
+.land-map .leaflet-container {
+  font: inherit;
+}
+.land-map .leaflet-tooltip {
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+.land-map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1) var(--s-4);
+  color: var(--ink-2);
+}
+.swatch {
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  border-radius: 2px;
+  vertical-align: -0.1em;
+  margin-right: 0.3em;
+  border: 2px solid currentColor;
+}
+.swatch[data-tone="reg"] { color: var(--reg); background: var(--reg-wash); }
+.swatch[data-tone="ochre"] { color: var(--ochre); background: var(--ochre-wash); }
+.swatch[data-tone="ink"] { color: var(--ink); background: var(--sheet-3); }
+.swatch[data-tone="red"] { color: var(--red); background: var(--red-wash); border-style: dashed; }
+
+.explorer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
+  gap: var(--s-5);
+  align-items: start;
+}
+@media (max-width: 960px) {
+  .explorer { grid-template-columns: 1fr; }
+}
+.explorer-tools {
+  display: grid;
+  gap: var(--s-3);
+}
+.explorer-tools fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--s-2);
+}
+.explorer-tools legend {
+  font-weight: 700;
+  margin-bottom: var(--s-1);
+}
+.explorer-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  align-items: end;
+}
+.explorer-row > label {
+  display: grid;
+  gap: 0.2rem;
+  font-size: 0.9rem;
+  flex: 1 1 7rem;
+}
+.mode-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1);
+}
+.mode-tabs button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--on-ink);
+  border-color: var(--ink);
+}
+.geo-db {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1) var(--s-4);
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+.picked {
+  border-left: 4px solid var(--ink);
+}
+
+.chain {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+}
+.chain > li {
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 1fr);
+  gap: var(--s-3);
+  position: relative;
+  padding-bottom: var(--s-4);
+}
+.chain > li::before {
+  content: "";
+  position: absolute;
+  left: 1.15rem;
+  top: 2.2rem;
+  bottom: 0;
+  border-left: 2px solid var(--rule-strong);
+}
+.chain > li:last-child::before { display: none; }
+.chain-seq {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  background: var(--reg-wash);
+  color: var(--reg);
+  border: 2px solid var(--reg);
+}
+.chain > li[data-current="true"] .chain-seq {
+  background: var(--ink);
+  color: var(--on-ink);
+  border-color: var(--ink);
+}
+.chain-body {
+  display: grid;
+  gap: 0.15rem;
+  padding-top: 0.3rem;
+}
+.chain-owner {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+.chain-link-label {
+  font-size: 0.8rem;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+}
+
+.records {
+  display: grid;
+  gap: var(--s-3);
+}
+.record-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--s-2) var(--s-4);
+  align-items: center;
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-s);
+  background: var(--sheet);
+}
+.record-card h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+.record-card p {
+  margin: 0;
+}
+@media (max-width: 560px) {
+  .record-card { grid-template-columns: 1fr; }
+}
+
+.corner-list {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  columns: 2;
+  margin: 0;
+  padding-left: 1.6rem;
+}
+
+.investigation-calls {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s-2);
+}
+.investigation-calls > li {
+  border: 1px solid var(--rule);
+  border-radius: var(--r-s);
+  padding: var(--s-2) var(--s-3);
+  background: var(--sheet);
+  display: grid;
+  gap: 0.25rem;
+}
+.investigation-calls > li[data-kind="turn"] {
+  border-style: dashed;
+  background: var(--sheet-2);
+}
+.investigation-calls > li[data-ok="false"] {
+  border-color: var(--red);
+  background: var(--red-wash);
+}
+.call-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+.call-obs {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--ink-2);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 9rem;
+  overflow: auto;
+  margin: 0;
+}
+.findings {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s-2);
+}
+.findings > li {
+  padding: var(--s-2) var(--s-3);
+  border-left: 4px solid var(--rule-strong);
+  background: var(--sheet-2);
+}
+.findings > li[data-severity="concern"] { border-color: var(--ochre); background: var(--ochre-wash); }
+.findings > li[data-refused="true"] { border-color: var(--red); background: var(--red-wash); text-decoration: line-through; text-decoration-thickness: 1px; }
+.findings > li[data-refused="true"] .why { text-decoration: none; display: block; }
+.page-wide {
+  width: min(100% - 2rem, 1360px);
+  margin-inline: auto;
+}
+.records {
+  container-type: inline-size;
+}
+@container (max-width: 520px) {
+  .record-card { grid-template-columns: 1fr; }
+}
+.callout li,
+.callout p {
+  overflow-wrap: anywhere;
+}

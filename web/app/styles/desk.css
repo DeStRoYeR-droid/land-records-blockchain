@@ -1,0 +1,233 @@
+/* Shared by the officers' desk, the citizen portal and the verify page. */
+
+.two-up {
+  display: grid;
+  gap: var(--s-5);
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .two-up {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* verify page */
+.verify-grid {
+  display: grid;
+  gap: var(--s-5);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .verify-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.verify-outcome {
+  display: grid;
+  gap: var(--s-4);
+}
+.verify-stamp {
+  display: flex;
+  justify-content: center;
+  padding: var(--s-3) 0 var(--s-2);
+}
+.offline-check {
+  border-top: 1px solid var(--rule);
+  padding-top: var(--s-3);
+}
+.offline-check summary {
+  cursor: pointer;
+  font-weight: 650;
+}
+
+/* a short list of people to pick from (sign-in) */
+.picklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--s-2);
+}
+.pick {
+  width: 100%;
+  display: grid;
+  gap: 0.1rem;
+  text-align: left;
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-s);
+  background: var(--sheet-2);
+  color: inherit;
+  cursor: pointer;
+}
+.pick:hover {
+  border-color: var(--rule-strong);
+  background: var(--sheet-3);
+}
+.pick .who {
+  font-weight: 650;
+}
+
+/* modal */
+.dialog {
+  width: min(560px, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  padding: 0;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--r-l);
+  background: var(--sheet);
+  color: var(--ink);
+  box-shadow: var(--shadow-overlay);
+}
+.dialog[data-wide] {
+  width: min(840px, calc(100vw - 2rem));
+}
+.dialog::backdrop {
+  background: rgb(15 21 34 / 0.55);
+}
+.dialog-body {
+  padding: var(--s-5);
+  display: grid;
+  gap: var(--s-4);
+}
+.dialog-body .panel-head {
+  margin-bottom: 0;
+}
+
+/* documents and intents */
+.doclist,
+.intents {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--s-3);
+}
+.doclist li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-s);
+  background: var(--sheet-2);
+}
+
+.linklike {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  color: inherit;
+}
+
+/* ledger explorer */
+.blocklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.blocklist > li {
+  border-top: 1px solid var(--rule);
+}
+.blocklist > li:first-child {
+  border-top: 0;
+}
+.blocklist > li[data-fresh] {
+  animation: fresh 3.5s ease-out;
+}
+@keyframes fresh {
+  from {
+    background: var(--col-wash);
+  }
+  to {
+    background: transparent;
+  }
+}
+.block-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 5rem 1fr auto auto auto;
+  gap: var(--s-3);
+  align-items: baseline;
+  padding: var(--s-3) var(--s-5);
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.block-row:hover {
+  background: var(--sheet-2);
+}
+.block-no {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+.block-kind {
+  font-weight: 600;
+}
+.block-body {
+  display: grid;
+  gap: var(--s-3);
+  padding: 0 var(--s-5) var(--s-4);
+}
+@media (max-width: 720px) {
+  .block-row {
+    grid-template-columns: 4rem 1fr;
+  }
+  .block-row > :nth-child(n + 3) {
+    grid-column: 2;
+  }
+}
+
+/* network */
+.node-grid {
+  display: grid;
+  gap: var(--s-4);
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+.node-card {
+  display: grid;
+  gap: var(--s-2);
+  padding: var(--s-4);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-m);
+  background: var(--sheet);
+  align-content: start;
+}
+.node-card[data-up="false"] {
+  border-color: var(--red);
+  background: var(--red-wash);
+}
+.node-card header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-2);
+}
+.node-card h3 {
+  font-size: var(--step-0);
+  font-family: var(--font-mono);
+}
+
+/* icons inside buttons take the size of the text */
+.btn svg {
+  width: 1.1em;
+  height: 1.1em;
+  flex: none;
+}
+
+.route {
+  margin-bottom: var(--s-3);
+}
+
+.side-collapsible {
+  display: contents;
+}

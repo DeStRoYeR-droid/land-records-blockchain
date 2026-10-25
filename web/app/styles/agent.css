@@ -1,0 +1,242 @@
+/* The AI validator: its graph, measured explanations, trace and metrics. */
+
+.explanation {
+  margin: 0;
+  padding: var(--s-3) var(--s-4);
+  border-left: 4px solid var(--agent);
+  background: var(--agent-wash);
+  border-radius: 0 var(--r-s) var(--r-s) 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.explanation[data-audience="citizen"] {
+  border-left-color: var(--field);
+  background: var(--field-wash);
+}
+.answer {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.attempts {
+  list-style: none;
+  padding: 0;
+  margin: var(--s-3) 0;
+  display: grid;
+  gap: var(--s-3);
+}
+.attempts li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--s-3);
+  align-items: start;
+}
+.attempts li:not(:has(.mark)) {
+  display: block;
+}
+.attempts .title {
+  font-weight: 650;
+}
+
+/* the graph */
+.graph {
+  display: grid;
+  gap: var(--s-4);
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+.graph-stage {
+  display: grid;
+  gap: var(--s-2);
+  align-content: start;
+  padding: var(--s-3);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-m);
+  background: var(--sheet-2);
+}
+.graph-stage h3 {
+  font-size: var(--step-0);
+}
+.graph-stage ol {
+  list-style: none;
+  padding: 0;
+  margin: var(--s-2) 0 0;
+  display: grid;
+  gap: var(--s-2);
+}
+.gnode {
+  display: grid;
+  gap: 0.1rem;
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--rule-strong);
+  border-radius: var(--r-s);
+  background: var(--sheet);
+  transition: background 0.2s, border-color 0.2s;
+}
+.gnode[data-conditional] {
+  border-style: dashed;
+  border-left-style: solid;
+}
+.gnode .gname {
+  font-weight: 700;
+  font-size: var(--step--1);
+}
+.gnode .gdesc {
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+.gnode[data-state="done"] {
+  border-left-color: var(--field);
+  background: var(--field-wash);
+}
+.gnode[data-state="active"] {
+  border-left-color: var(--violet);
+  background: var(--violet-wash);
+  box-shadow: 0 0 0 2px var(--violet);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+.gnode[data-state="error"] {
+  border-left-color: var(--red);
+  background: var(--red-wash);
+}
+@keyframes pulse {
+  50% {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--violet) 35%, transparent);
+  }
+}
+
+/* trace */
+.steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-m);
+  overflow: hidden;
+}
+.steps > li + li {
+  border-top: 1px solid var(--rule);
+}
+.step-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.5rem 5.5rem 1fr auto;
+  gap: var(--s-3);
+  align-items: center;
+  padding: var(--s-2) var(--s-3);
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.step-row:hover {
+  background: var(--sheet-2);
+}
+.step-kind {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+.step-kind[data-kind="llm"],
+.step-kind[data-kind="measure"] {
+  color: var(--violet);
+}
+.step-kind[data-kind="sign"],
+.step-kind[data-kind="anchor"],
+.step-kind[data-kind="verify"] {
+  color: var(--field);
+}
+.step-body {
+  display: grid;
+  gap: var(--s-2);
+  padding: 0 var(--s-3) var(--s-3) calc(1.5rem + var(--s-3) * 2);
+}
+.step-body .codeblock {
+  max-height: 16rem;
+  overflow: auto;
+}
+
+/* bars: timings and histogram */
+.timings {
+  display: grid;
+  gap: 0.35rem;
+}
+.timing {
+  display: grid;
+  grid-template-columns: 8rem 1fr auto;
+  gap: var(--s-3);
+  align-items: center;
+}
+.timing .bar,
+.histogram .bar {
+  display: block;
+  height: 0.7rem;
+  background: var(--sheet-3);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.timing .bar > span,
+.histogram .bar > span {
+  display: block;
+  height: 100%;
+  background: var(--agent);
+  border-radius: 999px;
+}
+.histogram .bar > span {
+  background: var(--violet);
+}
+.histogram {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+.histogram li {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr 2rem;
+  gap: var(--s-3);
+  align-items: center;
+}
+@media (max-width: 560px) {
+  .timing {
+    grid-template-columns: 6rem 1fr;
+  }
+  .timing > :last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* live event feed */
+.feed {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  max-height: 18rem;
+  overflow: auto;
+}
+.feed li {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: var(--s-3);
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.feed li[data-tone="ok"] span:last-child {
+  color: var(--field);
+}
+.feed li[data-tone="bad"] span:last-child {
+  color: var(--red);
+}
+.feed li[data-tone="warn"] span:last-child {
+  color: var(--ochre);
+}
+
+.edge-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--s-3) 0 0;
+  columns: 2 220px;
+}

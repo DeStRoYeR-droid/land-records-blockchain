@@ -1,0 +1,44 @@
+# ---------------------------------------------------------------------------
+# network/configtx.yaml -- what goes into the channel's genesis block (block 0).
+#
+# `python -m nodes.configtx` combines this file with network/nodes.yaml and
+# the organisations' root certificates into channel-artifacts/landchannel.block.
+# Every orderer and peer joins the channel with that same block, so they all
+# start from the same rules: who the members are, who orders, and which
+# endorsements a transaction needs.
+#
+# Changing a value here after setup has no effect on a running channel (the
+# genesis block is immutable). Chaincode changes go through
+# scripts/upgrade_chaincode.py, which commits a config transaction instead.
+# ---------------------------------------------------------------------------
+
+channel: landchannel
+
+orderer:
+  type: raft
+  consenters: [orderer1, orderer2, orderer3]
+  batch:
+    timeoutMs: 1000          # cut a block at most 1 s after its first transaction arrived
+                             # (Fabric's default is 2 s; 1 s keeps the dashboards snappy)
+    maxMessageCount: 10      # ...or as soon as 10 transactions are waiting
+    preferredMaxBytes: 524288
+  raft:
+    heartbeatMs: 250         # leader -> followers
+    electionTimeoutMs: [1500, 3000]  # each follower picks a random value in this range
+
+application:
+  orgs: [Org1MSP, Org2MSP, Org3MSP]
+  # Channel-level policies, as in Fabric's configtx.yaml
+  policies:
+    Readers: ANY Readers           # any member of any org may read
+    Writers: ANY Writers           # any client/admin of any org may submit
+    Admins: MAJORITY Admins        # channel changes need most org admins
+    LifecycleEndorsement: MAJORITY Admins   # chaincode upgrades need most org admins
+
+chaincodes:
+  landrec:
+    version: "1.0"
+    sequence: 1
+    module: chaincode.landrec      # Python import path, relative to the repo root
+    # No department can write to the ledger on its own.
+    endorsementPolicy: "AND('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer')"

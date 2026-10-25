@@ -1,0 +1,20 @@
+# LandChain (Python nodes + services). Python 3.10+ (3.11+ recommended for LangGraph).
+fastapi>=0.115
+uvicorn>=0.32
+httpx>=0.27
+cryptography>=43
+pyyaml>=6
+pydantic>=2.7
+
+# the AI validator: a LangGraph state graph over LangChain tools and prompts
+langgraph>=1.2
+langchain-core>=1.6
+langchain-openai>=1.7          # ChatOpenAI, pointed at oMLX's OpenAI-compatible endpoint
+langgraph-checkpoint-sqlite>=3.1   # a killed run resumes from its last node
+aiosqlite>=0.20
+
+# the geospatial database: exact polygon operations (the GeoPackage + R*Tree index is SQLite's own)
+shapely>=2.0
+
+# tests
+pytest>=8

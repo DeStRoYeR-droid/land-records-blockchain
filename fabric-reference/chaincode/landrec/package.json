@@ -1,0 +1,17 @@
+{
+  "name": "landrec",
+  "version": "1.0.0",
+  "description": "LandChain land registry smart contract: parcels, transfer applications, DigiLocker document anchors, attribute-based access control",
+  "main": "index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "fabric-chaincode-node start"
+  },
+  "dependencies": {
+    "fabric-contract-api": "~2.5.8",
+    "fabric-shim": "~2.5.8"
+  },
+  "license": "Apache-2.0"
+}

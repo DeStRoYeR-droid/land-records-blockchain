@@ -1,0 +1,72 @@
+# ---------------------------------------------------------------------------
+# network/nodes.yaml -- who exists and where each process listens.
+#
+# Every node is its own process with its own data directory, talking to the
+# others only over HTTP. `host` is the address OTHER processes use to reach the
+# node; `bind` is the interface the process itself listens on.
+#
+# Run a node on another machine (e.g. peer0.org3 on a teammate's laptop):
+#   1. set that node's `host` to the laptop's LAN/Tailscale IP -- on every machine
+#   2. set its `bind` to 0.0.0.0
+#   3. copy organizations/ to that laptop and start it there:
+#        python -m nodes.peer --name peer0.org3
+#
+# Ports sit in the 13xxx range so this network can run next to the Fabric
+# version in fabric-reference/ (12xxx) and next to oMLX (default 8000).
+# ---------------------------------------------------------------------------
+
+domain: landchain.example
+channel: landchannel
+
+organizations:
+  OrdererMSP:
+    name: OrdererOrg
+    domain: landchain.example
+    ca: ca-orderer
+  Org1MSP:
+    name: Registration
+    dept: registration
+    domain: org1.landchain.example
+    ca: ca-org1
+    peers: [peer0.org1]
+    users:            # enrolled at setup; role= and dept= go INTO the certificate
+      registrar1: registrar
+      clerk1: clerk
+      portal1: portal  # the citizen portal's service identity (can only register citizens)
+  Org2MSP:
+    name: Revenue
+    dept: revenue
+    domain: org2.landchain.example
+    ca: ca-org2
+    peers: [peer0.org2]
+    users:
+      verifier1: verifier
+      surveyor1: surveyor
+      agent1: agent    # the Agentic AI Validator: an identity, not an authority
+  Org3MSP:
+    name: Collectorate
+    dept: collectorate
+    domain: org3.landchain.example
+    ca: ca-org3
+    peers: [peer0.org3]
+    users:
+      collector1: collector
+
+nodes:
+  ca-orderer: {kind: ca,      org: OrdererMSP, host: 127.0.0.1, port: 13054, bind: 127.0.0.1}
+  ca-org1:    {kind: ca,      org: Org1MSP,    host: 127.0.0.1, port: 13154, bind: 127.0.0.1}
+  ca-org2:    {kind: ca,      org: Org2MSP,    host: 127.0.0.1, port: 13254, bind: 127.0.0.1}
+  ca-org3:    {kind: ca,      org: Org3MSP,    host: 127.0.0.1, port: 13354, bind: 127.0.0.1}
+  orderer1:   {kind: orderer, org: OrdererMSP, host: 127.0.0.1, port: 13050, bind: 127.0.0.1}
+  orderer2:   {kind: orderer, org: OrdererMSP, host: 127.0.0.1, port: 13060, bind: 127.0.0.1}
+  orderer3:   {kind: orderer, org: OrdererMSP, host: 127.0.0.1, port: 13070, bind: 127.0.0.1}
+  peer0.org1: {kind: peer,    org: Org1MSP,    host: 127.0.0.1, port: 13151, bind: 127.0.0.1}
+  peer0.org2: {kind: peer,    org: Org2MSP,    host: 127.0.0.1, port: 13251, bind: 127.0.0.1}
+  peer0.org3: {kind: peer,    org: Org3MSP,    host: 127.0.0.1, port: 13351, bind: 127.0.0.1}
+
+services:
+  digilocker: {host: 127.0.0.1, port: 13800, bind: 127.0.0.1}
+  agent:      {host: 127.0.0.1, port: 13950, bind: 127.0.0.1}
+  # 0.0.0.0 so teammates' laptops can run the web app against this gateway
+  gateway:    {host: 127.0.0.1, port: 13900, bind: 0.0.0.0}
+  web:        {host: 127.0.0.1, port: 3000,  bind: 0.0.0.0}

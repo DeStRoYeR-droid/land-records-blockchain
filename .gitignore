@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+landchain.env
+data/
+organizations/
+channel-artifacts/
+logs/
+run/
+web/node_modules/
+web/.next/
+web/tsconfig.tsbuildinfo
+.DS_Store
